@@ -1,0 +1,6 @@
+PORT=8000
+DB_NAME=upcycled
+DB_USERNAME=myself
+DB_PASSWORD=mypasscode
+DB_HOST=patna
+DB_PORT=0000
