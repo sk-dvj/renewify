@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
+import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt";
 
 const User = sequelize.define('User', {
@@ -42,7 +43,34 @@ hooks:{
         }
 
 }
-});
 
+});
+// once password generation and validation is done
+//tokens are genereated, instance of function that generate
+//refresh and access tokens.
+User.prototype.generateRefreshToken = function(){
+  return jwt.sign(
+    {
+      user_id:this.user_id
+    },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn:process.env.REFRESH_TOKEN_EXPIRY
+    }
+)
+}
+User.prototype.generateAccessToken = function(){
+  return jwt.sign(
+    {
+      id:this.user_id,
+      full_name:this.full_name,
+      email:this.email,
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn:process.env.ACCESS_TOKEN_EXPIRY
+    }
+  )
+}
 
 export default User;
